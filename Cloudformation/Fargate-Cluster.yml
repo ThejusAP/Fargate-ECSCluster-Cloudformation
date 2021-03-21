@@ -66,6 +66,12 @@ Resources:
     Properties:
       VpcId: !Ref VPC
 
+  # Create a private RouteTable
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+
   # Create a Route to allow access to internet using an internet gateway
   PublicRoute:
     Type: AWS::EC2::Route
@@ -89,19 +95,19 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref SubnetB
 
-   # Attach Private Route to SubnetC    
-      SubnetCPrivateRouteAssociation:
-        Type: 'AWS::EC2::SubnetRouteTableAssociation'
-        Properties:
-          SubnetId: !Ref SubnetC
-          RouteTableId: !Ref PrivateRouteTable
+  # Attach Private Route to SubnetC    
+  SubnetCPrivateRouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetC
+      RouteTableId: !Ref PrivateRouteTable
  
-   # Attach Private Route to SubnetD  
-      SubnetDPrivateRouteAssociation:
-        Type: 'AWS::EC2::SubnetRouteTableAssociation'
-        Properties:
-          SubnetId: !Ref SubnetD
-          RouteTableId: !Ref PrivateRouteTable
+  # Attach Private Route to SubnetD  
+  SubnetDPrivateRouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetD
+      RouteTableId: !Ref PrivateRouteTable
 
   # Create an Internet Gateway
   InternetGateway:
