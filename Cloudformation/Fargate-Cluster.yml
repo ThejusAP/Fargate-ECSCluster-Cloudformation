@@ -41,6 +41,25 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone: !Join ['', [!Ref "AWS::Region", 'b']]
 
+  # Create a private Subnet
+  SubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.10.3.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Join ['', [!Ref "AWS::Region", 'c']]
+      MapPublicIpOnLaunch: false
+
+  # Create a private Subnet
+  SubnetD:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.10.4.0/24
+      VpcId: !Ref VPC
+      AvailabilityZone: !Join ['', [!Ref "AWS::Region", 'd']]
+      MapPublicIpOnLaunch: false
+
+
   # Create a route table to allow access to internet
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -70,6 +89,20 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref SubnetB
 
+   # Attach Private Route to SubnetC    
+      SubnetCPrivateRouteAssociation:
+        Type: 'AWS::EC2::SubnetRouteTableAssociation'
+        Properties:
+          SubnetId: !Ref SubnetC
+          RouteTableId: !Ref PrivateRouteTable
+ 
+   # Attach Private Route to SubnetD  
+      SubnetDPrivateRouteAssociation:
+        Type: 'AWS::EC2::SubnetRouteTableAssociation'
+        Properties:
+          SubnetId: !Ref SubnetD
+          RouteTableId: !Ref PrivateRouteTable
+
   # Create an Internet Gateway
   InternetGateway:
     Type: AWS::EC2::InternetGateway
@@ -95,6 +128,54 @@ Resources:
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy'
 
+  #   Create EFS and security group
+    EFSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Enable EFS access via port 2049
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          SourceSecurityGroupId: !Ref ContainerSecurityGroup
+  FileSystemResource:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      Encrypted: true
+      FileSystemTags:
+        - Key: Name
+          Value: ecs-efs
+  MountTargetResource1:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref FileSystemResource
+      VpcId: !Ref VPC
+      SubnetId: !Ref SubnetC
+      SecurityGroups:
+        - !Ref EFSSecurityGroup
+  MountTargetResource2:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref FileSystemResource
+      VpcId: !Ref VPC
+      SubnetId: Ref SubnetD
+      SecurityGroups:
+        - !Ref EFSSecurityGroup
+  AccessPointResource:
+    Type: AWS::EFS::AccessPoint
+    Properties:
+      FileSystemId: !Ref FileSystemResource
+      PosixUser:
+        Uid: '1000'
+        Gid: '1000'
+      RootDirectory:
+        CreationInfo:
+          OwnerGid: '1000'
+          OwnerUid: '1000'
+          Permissions: '755'
+        Path: '/WP'
+
   # Create a TaskDefinition with container details
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -106,12 +187,30 @@ Resources:
         - 'FARGATE'
       TaskRoleArn: !Ref ExecutionRole
       ExecutionRoleArn: !Ref ExecutionRole
+      Volumes:
+        - Name: wp-content
+          EFSVolumeConfiguration:
+            FilesystemId: !Ref FileSystemResource
+            TransitEncryption: ENABLED
+            AuthorizationConfig:
+              AccessPointId: !Ref AccessPointResource
+              IAM: ENABLED
       ContainerDefinitions:
         - Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'Container']]
           Image: !Ref ImageURI
           PortMappings:
             - ContainerPort: !Ref ContainerPort
               HostPort: !Ref ContainerPort
+          Environment: 
+            - DB_HOST: db
+              DB_PASSWORD: wordpress
+              DB_NAME: wordpress
+              DB_USER: wordpress
+              WORDPRESS_SITE_URL: http://localhost
+              FS_METHOD: direct
+          MountPoints: 
+            - ContainerPath: /var/www/wp-content
+              SourceVolume: wp-content       
 
   # Creat a security group for load balancer and open port 80 in bound from internet
   LoadBalancerSecurityGroup:
