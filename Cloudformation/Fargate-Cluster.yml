@@ -207,11 +207,7 @@ Resources:
           PortMappings:
             - ContainerPort: !Ref ContainerPort
               HostPort: !Ref ContainerPort
-          Environment: 
-            - DB_HOST: wordpressdb.czvdcdaqk5qc.us-east-1.rds.amazonaws.com
-              DB_PASSWORD: sdvof3rqbwfaksdjhgcbq43garwfsdc
-              DB_NAME: WORDPRESS
-              DB_USER: theju12344321
+          
           MountPoints: 
             - ContainerPath: /var/www/wp-content
               SourceVolume: wp-content       
