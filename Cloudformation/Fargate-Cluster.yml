@@ -25,7 +25,7 @@ Resources:
       EnableDnsHostnames: True
       EnableDnsSupport: True
 
-  # Create a Subnet
+  # Create a public Subnet
   SubnetA:
     Type: AWS::EC2::Subnet
     Properties:
@@ -33,7 +33,7 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone: !Join ['', [!Ref "AWS::Region", 'a']]
 
-  # Create a Subnet
+  # Create a public Subnet
   SubnetB:
     Type: AWS::EC2::Subnet
     Properties:
