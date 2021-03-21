@@ -212,8 +212,6 @@ Resources:
               DB_PASSWORD: sdvof3rqbwfaksdjhgcbq43garwfsdc
               DB_NAME: WORDPRESS
               DB_USER: theju12344321
-              WORDPRESS_SITE_URL: http://localhost
-              FS_METHOD: direct
           MountPoints: 
             - ContainerPath: /var/www/wp-content
               SourceVolume: wp-content       
