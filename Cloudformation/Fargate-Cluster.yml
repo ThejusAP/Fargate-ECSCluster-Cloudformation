@@ -202,10 +202,10 @@ Resources:
             - ContainerPort: !Ref ContainerPort
               HostPort: !Ref ContainerPort
           Environment: 
-            - DB_HOST: db
-              DB_PASSWORD: wordpress
-              DB_NAME: wordpress
-              DB_USER: wordpress
+            - DB_HOST: wordpressdb.czvdcdaqk5qc.us-east-1.rds.amazonaws.com
+              DB_PASSWORD: sdvof3rqbwfaksdjhgcbq43garwfsdc
+              DB_NAME: WORDPRESS
+              DB_USER: theju12344321
               WORDPRESS_SITE_URL: http://localhost
               FS_METHOD: direct
           MountPoints: 
