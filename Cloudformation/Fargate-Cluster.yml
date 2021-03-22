@@ -148,7 +148,7 @@ Resources:
   FileSystemResource:
     Type: AWS::EFS::FileSystem
     Properties:
-      Encrypted: true
+      Encrypted: true   
       FileSystemTags:
         - Key: Name
           Value: ecs-efs
@@ -269,7 +269,7 @@ Resources:
       Port: 80
       Protocol: HTTP
 
-  # Create an ECS Service and add created Cluster, TaskDefintion, Subnets, TargetGroup and SecurityGroup
+  # Create an ECS Service and add created Cluster,TaskDefintion, Subnets, TargetGroup and SecurityGroup
   ECSService:
     Type: AWS::ECS::Service
     DependsOn: LoadBalancerListener
