@@ -156,7 +156,6 @@ Resources:
     Type: AWS::EFS::MountTarget
     Properties:
       FileSystemId: !Ref FileSystemResource
-      VpcId: !Ref VPC
       SubnetId: !Ref SubnetC
       SecurityGroups:
         - !Ref EFSSecurityGroup
@@ -164,7 +163,6 @@ Resources:
     Type: AWS::EFS::MountTarget
     Properties:
       FileSystemId: !Ref FileSystemResource
-      VpcId: !Ref VPC
       SubnetId: Ref SubnetD
       SecurityGroups:
         - !Ref EFSSecurityGroup
