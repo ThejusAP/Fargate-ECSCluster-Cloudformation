@@ -221,7 +221,8 @@ Resources:
       MasterUsername: !Ref DBUsername
       MasterUserPassword: !Ref DBpassword
       PubliclyAccessible: false
-      VPCSecurityGroups: !Ref DBSecurityGroup
+      VPCSecurityGroups: 
+       - !Ref DBSecurityGroup
         
       
 
