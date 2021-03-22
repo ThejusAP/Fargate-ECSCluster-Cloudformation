@@ -163,7 +163,7 @@ Resources:
     Type: AWS::EFS::MountTarget
     Properties:
       FileSystemId: !Ref FileSystemResource
-      SubnetId: Ref SubnetD
+      SubnetId: !Ref SubnetD
       SecurityGroups:
         - !Ref EFSSecurityGroup
   AccessPointResource:
