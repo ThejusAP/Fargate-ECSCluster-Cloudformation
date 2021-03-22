@@ -11,19 +11,19 @@ Parameters:
   DBInstanceClass:
     Type: String
     Description: The ID of the second subnet to place the RDS instance into.
-    Default: 'db.t2.micro'
+    Default: db.t2.micro
   DBName:
     Type: String
     Description: The name of the database that is created within the mysql instance.
-    Default: 'wordpress'
+    Default: wordpress
   DBUsername:
     Type: String
     Description: The master user name for the mysql instance.
-    Default: 'wordpress'
+    Default: wordpress
   DBpassword:
     Type: String
     Description: The master user password for the mysql instance.
-    Default: 'wordpress1234554321tfggcvyghcvrfgwerfq3e'
+    Default: wordpress1234554321tfggcvyghcvrfgwerfq3e
 
 Resources:
 
