@@ -143,14 +143,14 @@ Resources:
       RouteTableId: !Ref PrivateRouteTable
 
   # Attach Private Route to SubnetE 
-  SubnetDPrivateRouteAssociation:
+  SubnetEPrivateRouteAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       SubnetId: !Ref SubnetE
       RouteTableId: !Ref PrivateRouteTable
 
   # Attach Private Route to SubnetF  
-  SubnetDPrivateRouteAssociation:
+  SubnetFPrivateRouteAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       SubnetId: !Ref SubnetF
@@ -266,7 +266,7 @@ Resources:
           OwnerGid: '1000'
           OwnerUid: '1000'
           Permissions: '755'
-        Path: '/WP'
+        Path: '/var/www/wp-content'
 
   # Create a TaskDefinition with container details
   TaskDefinition:
