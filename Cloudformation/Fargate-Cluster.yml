@@ -224,7 +224,7 @@ Resources:
 
   #   Create EFS and security group
   EFSSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
+    Type: 'AWS::EC2::SecurityGroup'
     Properties:
       VpcId: !Ref VPC
       GroupDescription: Enable EFS access via port 2049
@@ -234,7 +234,7 @@ Resources:
           ToPort: 2049
           SourceSecurityGroupId: !Ref ContainerSecurityGroup
   FileSystemResource:
-    Type: AWS::EFS::FileSystem
+    Type: 'AWS::EFS::FileSystem'
     Properties:
       Encrypted: true   
       FileSystemTags:
@@ -254,19 +254,7 @@ Resources:
       SubnetId: !Ref SubnetD
       SecurityGroups:
         - !Ref EFSSecurityGroup
-  AccessPointResource:
-    Type: AWS::EFS::AccessPoint
-    Properties:
-      FileSystemId: !Ref FileSystemResource
-      PosixUser:
-        Uid: '1000'
-        Gid: '1000'
-      RootDirectory:
-        CreationInfo:
-          OwnerGid: '1000'
-          OwnerUid: '1000'
-          Permissions: '755'
-        Path: '/var/www/wp-content'
+
 
   # Create a TaskDefinition with container details
   TaskDefinition:
@@ -284,9 +272,6 @@ Resources:
           EFSVolumeConfiguration:
             FilesystemId: !Ref FileSystemResource
             TransitEncryption: ENABLED
-            AuthorizationConfig:
-              AccessPointId: !Ref AccessPointResource
-              IAM: ENABLED
       ContainerDefinitions:
         - Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'Container']]
           Image: !Ref ImageURI
@@ -346,7 +331,7 @@ Resources:
 
   # Create a TargetGroup for HTTP port 80
   TargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
     Properties:
       Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'TargetGroup']]
       Port: 80
@@ -356,7 +341,7 @@ Resources:
 
   # Create a LoadBalancerListener and attach the TargetGroup and LoadBalancer
   LoadBalancerListener:
-    Type: AWS::ElasticLoadBalancingV2::Listener
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
     Properties:
       DefaultActions: 
         - TargetGroupArn: !Ref TargetGroup
