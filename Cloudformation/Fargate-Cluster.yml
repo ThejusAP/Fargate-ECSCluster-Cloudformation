@@ -3,10 +3,8 @@ Description: The CloudFormation template for the Fargate ECS Cluster.
 Parameters:
   Stage:
     Type: String
-    
   ContainerPort:
     Type: Number
-   
   ImageURI:
     Type: String
   VPC:
@@ -24,7 +22,13 @@ Parameters:
   DBPassword:
     Type: String
     NoEcho : 'true'
-    Default: 'sdvof3rqbwfaksdjhgcbq43garwfsdc'   
+    Default: 'sdvof3rqbwfaksdjhgcbq43garwfsdc' 
+  DBName:
+    Type: String
+    Default: 'WORDPRESS'
+  DBUsername:
+    Type: String
+    Default: 'theju12344321'    
 
 Resources:
   Cluster:
