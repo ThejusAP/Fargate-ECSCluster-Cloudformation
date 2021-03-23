@@ -3,30 +3,29 @@ Description: The CloudFormation template for the Fargate ECS Cluster.
 Parameters:
   Stage:
     Type: String
+    
   ContainerPort:
     Type: Number
+   
+  ImageURI:
+    Type: String
   VPC:
     Type: 'AWS::EC2::VPC::Id'
-    VpcId: 'vpc-88c2d9f2'
+    Default: 'vpc-01a48c268970adfc5'
   SubnetA:
     Type: 'AWS::EC2::Subnet::Id'
-    SubnetId: 'subnet-02e1cbeda0e0c4e77'
+    Default: 'subnet-02e1cbeda0e0c4e77'
   SubnetB:
     Type: 'AWS::EC2::Subnet::Id'
-    SubnetId: 'subnet-039e2afc7f99eb06f'
-
+    Default: 'subnet-039e2afc7f99eb06f'
   DBHost:
     Type: String
     Default: 'wordpress.czvdcdaqk5qc.us-east-1.rds.amazonaws.com'
   DBPassword:
     Type: String
-    Default: 'sdvof3rqbwfaksdjhgcbq43garwfsdc'
-  DBName:
-    Type: String
-    Default: 'WORDPRESS'
-  DBUsername:
-    Type: String
-    Default: 'theju12344321'           
+    NoEcho : 'true'
+    Default: 'sdvof3rqbwfaksdjhgcbq43garwfsdc'   
+
 Resources:
   Cluster:
     Type: 'AWS::ECS::Cluster'
